@@ -18,6 +18,41 @@ const projects = [
     tags: ["PyTorch", "MONAI", "Streamlit", "Cryo-ET"],
     link: "#",
   },
+  {
+    title: "E-Commerce Microservices Architecture",
+    description:
+      "Designed a highly scalable e-commerce backend utilizing a modular microservices architecture. Implemented Apache Kafka for event-driven asynchronous communication and Spring Boot for persistent data storage via PostgreSQL.",
+    tags: ["Microservices", "Kafka", "Spring Boot", "PostgreSQL"],
+    link: "#",
+  },
+  {
+    title: "Open edX LMS Enhancement",
+    description:
+      "Spearheaded a 19-member engineering team across 6 sub-teams to customize and scale an Open edX-based Learning Management System. Directed the Agile project lifecycle to deliver 6 custom features that improved learner engagement.",
+    tags: ["Open edX", "Agile", "Team Lead", "LMS"],
+    link: "#",
+  },
+  {
+    title: "WhatsApp Broadcasting Web App",
+    description:
+      "Architected and developed a full-stack WhatsApp broadcasting application. Built a responsive mobile-first UI with React and designed a scalable Express.js back-end, utilizing RESTful APIs for seamless data exchange.",
+    tags: ["React", "Express.js", "RESTful APIs", "Full-Stack"],
+    link: "#",
+  },
+  {
+    title: "Face Emotion Recognition for Game Testing",
+    description:
+      "Engineered a real-time facial emotion recognition (FER) system using computer vision. Fine-tuned a CNN model achieving 89% accuracy on RAF-DB, logging user reactions via webcam and visualizing gameplay pain points via heatmaps.",
+    tags: ["Computer Vision", "CNN", "Machine Learning", "Data Pipeline"],
+    link: "#",
+  },
+  {
+    title: "Market Basket Analysis Application",
+    description:
+      "Developed a desktop application processing transaction data to identify purchasing patterns. Implemented the Apriori algorithm with optimized tree-structures and built a Java Swing GUI for visualizing association rules (support/confidence).",
+    tags: ["Java Swing", "Apriori Algorithm", "Data Mining", "OOP"],
+    link: "#",
+  },
 ];
 
 export default function Projects() {
