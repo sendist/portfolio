@@ -28,7 +28,7 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${spaceGrotesk.variable} h-full antialiased dark`}
     >
-      <body className="min-h-full flex flex-col bg-[#111111] text-[#F5F5F5] font-sans">
+      <body className="min-h-full flex flex-col bg-[#111111] text-[#F5F5F5] font-sans relative">
         <SmoothScroller>{children}</SmoothScroller>
       </body>
     </html>

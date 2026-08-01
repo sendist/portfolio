@@ -2,11 +2,13 @@
 
 import { motion } from "framer-motion";
 import { ArrowDown } from "lucide-react";
+import BackgroundPattern from "@/components/BackgroundPattern";
 
 export default function Hero() {
   return (
     <section className="relative h-screen flex flex-col justify-center px-6 md:px-12 lg:px-24">
-      <div className="max-w-4xl">
+      <BackgroundPattern />
+      <div className="max-w-4xl z-10 relative">
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
