@@ -41,11 +41,10 @@ export default function Certifications() {
         <div>
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight uppercase flex items-center gap-4">
             Certifications
-            <Award className="w-8 h-8 md:w-10 md:h-10 text-gray-600" />
           </h2>
-          <p className="text-gray-400 mt-4 max-w-xl font-sans">
+          {/* <p className="text-gray-400 mt-4 max-w-xl font-sans">
             A continuous commitment to mastering new technologies and methodologies.
-          </p>
+          </p> */}
         </div>
 
         <button
@@ -70,9 +69,9 @@ export default function Certifications() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5, delay: (index % 6) * 0.1 }}
-            className="group w-[280px] md:w-[340px] lg:w-[360px] snap-center flex flex-col gap-4"
+            className="group w-[280px] snap-center flex flex-col gap-4"
           >
-            <div 
+            <div
               onClick={() => setSelectedImage(cert.image)}
               className="relative aspect-[4/3] w-full overflow-hidden border border-gray-800 bg-[#050505] cursor-pointer"
             >
