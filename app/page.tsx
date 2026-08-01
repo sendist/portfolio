@@ -14,7 +14,7 @@ export default function Home() {
       <SkillsEducation />
       <Certifications />
       <Contact />
-      <footer className="py-8 text-center text-gray-600 font-sans text-sm border-t border-gray-900 mt-24">
+      <footer className="py-8 text-center text-gray-600 font-sans text-sm border-t border-gray-900">
         &copy; {new Date().getFullYear()} Sendi Setiawan. All rights reserved.
       </footer>
     </main>
