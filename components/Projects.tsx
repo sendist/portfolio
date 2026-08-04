@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowUpRight, ExternalLink, X, Calendar, User } from "lucide-react";
+import { ArrowUpRight, ExternalLink, X, Calendar, User, ChevronLeft, ChevronRight } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import { useState, useEffect } from "react";
 
@@ -12,7 +12,7 @@ const projects = [
     description: "Automated candidate evaluation system using a Retrieval-Augmented Generation (RAG) pipeline with local MiniLM embeddings and a Qdrant vector database for semantic retrieval. Integrated Gemini 2.5 Flash LLM using deterministic prompts and a fixed chunking strategy.",
     role: "Backend Engineer",
     duration: "2024",
-    image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&auto=format&fit=crop&q=80",
+    images: ["https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&auto=format&fit=crop&q=80"],
     tags: ["RAG", "Qdrant", "Gemini LLM", "MiniLM"],
     githubLink: "#",
     liveLink: "#",
@@ -28,7 +28,7 @@ const projects = [
     description: "Optimized a 3D U-Net model using PyTorch and MONAI, improving the F-beta score from 0.643 to 0.714 by integrating Squeeze-and-Excitation (SE) attention mechanisms. Developed an interactive Streamlit inference interface to streamline visualization on Cryo-ET datasets.",
     role: "Machine Learning Engineer",
     duration: "2023 - 2024",
-    image: "https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=800&auto=format&fit=crop&q=80",
+    images: ["/projects/unet.png", "/projects/unet2.png"],
     tags: ["PyTorch", "MONAI", "Streamlit", "Cryo-ET"],
     githubLink: "#",
     liveLink: "#",
@@ -44,7 +44,7 @@ const projects = [
     description: "Designed a highly scalable e-commerce backend utilizing a modular microservices architecture. Implemented Apache Kafka for event-driven asynchronous communication and Spring Boot for persistent data storage via PostgreSQL.",
     role: "Backend Architect",
     duration: "2023",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80",
+    images: ["/projects/microservice.jpg", "/projects/microservice2.jpg"],
     tags: ["Microservices", "Kafka", "Spring Boot", "PostgreSQL"],
     githubLink: "#",
     liveLink: "#",
@@ -60,7 +60,7 @@ const projects = [
     description: "Spearheaded a 19-member engineering team across 6 sub-teams to customize and scale an Open edX-based Learning Management System. Directed the Agile project lifecycle to deliver 6 custom features that improved learner engagement.",
     role: "Engineering Team Lead",
     duration: "2022 - 2023",
-    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&auto=format&fit=crop&q=80",
+    images: ["/projects/edx.png", "/projects/edx2.png", "/projects/edx3.png", "/projects/edx4.png", "/projects/edx5.png", "/projects/edx6.png"],
     tags: ["Open edX", "Agile", "Team Lead", "LMS"],
     githubLink: "#",
     liveLink: "#",
@@ -76,7 +76,7 @@ const projects = [
     description: "Architected and developed a full-stack WhatsApp broadcasting application. Built a responsive mobile-first UI with React and designed a scalable Express.js back-end, utilizing RESTful APIs for seamless data exchange.",
     role: "Full-Stack Developer",
     duration: "2022",
-    image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&auto=format&fit=crop&q=80",
+    images: ["/projects/broadcast.jpg", "/projects/broadcast2.png", "/projects/broadcast3.png", "/projects/broadcast4.png"],
     tags: ["React", "Express.js", "RESTful APIs", "Full-Stack"],
     githubLink: "#",
     liveLink: "#",
@@ -92,7 +92,7 @@ const projects = [
     description: "Engineered a real-time facial emotion recognition (FER) system using computer vision. Fine-tuned a CNN model achieving 89% accuracy on RAF-DB, logging user reactions via webcam and visualizing gameplay pain points via heatmaps.",
     role: "Computer Vision Engineer",
     duration: "2021",
-    image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&auto=format&fit=crop&q=80",
+    images: ["/projects/FER.png"],
     tags: ["Computer Vision", "CNN", "Machine Learning", "Data Pipeline"],
     githubLink: "#",
     liveLink: "#",
@@ -108,7 +108,7 @@ const projects = [
     description: "Developed a desktop application processing transaction data to identify purchasing patterns. Implemented the Apriori algorithm with optimized tree-structures and built a Java Swing GUI for visualizing association rules (support/confidence).",
     role: "Software Developer",
     duration: "2021",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80",
+    images: ["https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80"],
     tags: ["Java Swing", "Apriori Algorithm", "Data Mining", "OOP"],
     githubLink: "#",
     liveLink: "#",
@@ -124,11 +124,13 @@ type Project = typeof projects[0];
 
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // Prevent background scrolling when modal is open
   useEffect(() => {
     if (selectedProject) {
       document.body.style.overflow = "hidden";
+      setCurrentImageIndex(0); // Reset image index when a new project is selected
     } else {
       document.body.style.overflow = "unset";
     }
@@ -136,6 +138,20 @@ export default function Projects() {
       document.body.style.overflow = "unset";
     };
   }, [selectedProject]);
+
+  const handleNextImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (selectedProject && currentImageIndex < selectedProject.images.length - 1) {
+      setCurrentImageIndex(prev => prev + 1);
+    }
+  };
+
+  const handlePrevImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (selectedProject && currentImageIndex > 0) {
+      setCurrentImageIndex(prev => prev - 1);
+    }
+  };
 
   return (
     <section className="py-24 px-6 md:px-12 lg:px-24 bg-[#0a0a0a] relative">
@@ -221,14 +237,52 @@ export default function Projects() {
                 <X className="w-5 h-5" />
               </button>
 
-              {/* Image Section */}
-              <div className="w-full md:w-1/2 h-64 md:h-auto relative bg-[#050505] border-b md:border-b-0 md:border-r border-gray-800">
-                <img
-                  src={selectedProject.image}
-                  alt={selectedProject.title}
-                  className="w-full h-full object-cover opacity-80"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent md:bg-gradient-to-r opacity-50 pointer-events-none" />
+              {/* Image Section / Slider */}
+              <div className="w-full md:w-1/2 h-64 md:h-auto relative bg-[#050505] border-b md:border-b-0 md:border-r border-gray-800 flex items-center justify-center overflow-hidden">
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={currentImageIndex}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.3 }}
+                    src={selectedProject.images[currentImageIndex]}
+                    alt={`${selectedProject.title} - Image ${currentImageIndex + 1}`}
+                    className="w-full h-full object-contain"
+                  />
+                </AnimatePresence>
+
+                {/* Slider Controls */}
+                {selectedProject.images.length > 1 && (
+                  <>
+                    <button 
+                      onClick={handlePrevImage}
+                      disabled={currentImageIndex === 0}
+                      className="absolute left-4 p-2 bg-black/50 hover:bg-black disabled:opacity-30 disabled:hover:bg-black/50 text-white rounded-full transition-all"
+                    >
+                      <ChevronLeft className="w-6 h-6" />
+                    </button>
+                    <button 
+                      onClick={handleNextImage}
+                      disabled={currentImageIndex === selectedProject.images.length - 1}
+                      className="absolute right-4 p-2 bg-black/50 hover:bg-black disabled:opacity-30 disabled:hover:bg-black/50 text-white rounded-full transition-all"
+                    >
+                      <ChevronRight className="w-6 h-6" />
+                    </button>
+
+                    {/* Dots indicator */}
+                    <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
+                      {selectedProject.images.map((_, idx) => (
+                        <div 
+                          key={idx} 
+                          className={`w-2 h-2 rounded-full transition-all ${idx === currentImageIndex ? "bg-white scale-125" : "bg-white/30"}`}
+                        />
+                      ))}
+                    </div>
+                  </>
+                )}
+
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent md:bg-gradient-to-r opacity-30 pointer-events-none" />
               </div>
 
               {/* Content Section */}
