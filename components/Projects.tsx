@@ -322,18 +322,17 @@ export default function Projects() {
         ))}
       </div>
 
-      {/* Expanded Modal */}
+      {/* Project case study */}
       <AnimatePresence>
         {selectedProject && (
-          <motion.div layoutRoot className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8">
+          <motion.div layoutRoot className="case-overlay">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedProject(null)}
-              className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-pointer"
+              className="case-backdrop"
             />
-
             <motion.div
               ref={modalRef}
               role="dialog"
@@ -341,156 +340,93 @@ export default function Projects() {
               aria-labelledby="project-modal-title"
               layoutId={`project-container-${selectedProject.id}`}
               transition={{ layout: projectLayoutTransition }}
-              className="relative w-full max-w-5xl bg-[#0a0a0a] border border-gray-800 flex flex-col md:flex-row overflow-hidden max-h-[90vh] shadow-2xl z-10"
+              className="case-dialog"
             >
-              {/* Close Button */}
-              <button
-                onClick={() => setSelectedProject(null)}
-                aria-label="Close project"
-                className="absolute top-4 right-4 z-20 p-2 bg-black/50 hover:bg-black rounded-full text-gray-400 hover:text-white transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
+              <header className="case-header">
+                <div><span>Selected work</span><span className="case-header-divider" aria-hidden="true">/</span><span>{categoryFor(selectedProject)}</span></div>
+                <button onClick={() => setSelectedProject(null)} aria-label="Close project" className="case-close">Close <X size={17} /></button>
+              </header>
 
-              {/* Image Section / Slider */}
-              {selectedProject.images.length > 0 && (
-              <div className="w-full md:w-1/2 h-64 md:h-auto shrink-0 relative bg-[#050505] border-b md:border-b-0 md:border-r border-gray-800 flex items-center justify-center overflow-hidden">
-                <AnimatePresence mode="wait">
-                  <motion.img
-                    key={currentImageIndex}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3 }}
-                    src={selectedProject.images[currentImageIndex]}
-                    alt={`${selectedProject.title} - Image ${currentImageIndex + 1}`}
-                    className="w-full h-full object-contain"
-                  />
-                </AnimatePresence>
-
-                {/* Slider Controls */}
-                {selectedProject.images.length > 1 && (
-                  <>
-                    <button 
-                      aria-label="Previous project image"
-                      onClick={handlePrevImage}
-                      disabled={currentImageIndex === 0}
-                      className="absolute left-4 p-2 bg-black/50 hover:bg-black disabled:opacity-30 disabled:hover:bg-black/50 text-white rounded-full transition-all"
-                    >
-                      <ChevronLeft className="w-6 h-6" />
-                    </button>
-                    <button 
-                      aria-label="Next project image"
-                      onClick={handleNextImage}
-                      disabled={currentImageIndex === selectedProject.images.length - 1}
-                      className="absolute right-4 p-2 bg-black/50 hover:bg-black disabled:opacity-30 disabled:hover:bg-black/50 text-white rounded-full transition-all"
-                    >
-                      <ChevronRight className="w-6 h-6" />
-                    </button>
-
-                    {/* Dots indicator */}
-                    <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
-                      {selectedProject.images.map((_, idx) => (
-                        <div 
-                          key={idx} 
-                          className={`w-2 h-2 rounded-full transition-all ${idx === currentImageIndex ? "bg-white scale-125" : "bg-white/30"}`}
+              <motion.div layoutScroll data-lenis-prevent className="case-body project-modal-scroll">
+                <aside className={`case-gallery case-gallery-${selectedProject.id}`} aria-label="Project gallery">
+                  <div className="case-image-stage">
+                    {selectedProject.images.length > 0 ? (
+                      <AnimatePresence mode="wait">
+                        <motion.img
+                          key={`${selectedProject.id}-${currentImageIndex}`}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.18 }}
+                          src={selectedProject.images[currentImageIndex]}
+                          alt={`${selectedProject.title} - Image ${currentImageIndex + 1}`}
+                          className="case-image"
                         />
+                      </AnimatePresence>
+                    ) : <ProjectArtwork id={selectedProject.id} />}
+                  </div>
+                  {selectedProject.images.length > 0 && (
+                    <div className="case-gallery-footer">
+                      <span aria-live="polite">Image {currentImageIndex + 1} <span className="case-count-divider">/</span> {selectedProject.images.length}</span>
+                      <div className="case-gallery-navigation">
+                        <button aria-label="Previous project image" onClick={handlePrevImage} disabled={currentImageIndex === 0}><ChevronLeft size={17} /></button>
+                        <button aria-label="Next project image" onClick={handleNextImage} disabled={currentImageIndex === selectedProject.images.length - 1}><ChevronRight size={17} /></button>
+                      </div>
+                    </div>
+                  )}
+                  {selectedProject.images.length > 1 && (
+                    <div className="case-thumbnails" aria-label="Choose project image">
+                      {selectedProject.images.map((src, index) => (
+                        <button key={src} aria-label={`View project image ${index + 1}`} aria-pressed={currentImageIndex === index} onClick={() => setCurrentImageIndex(index)}>
+                          <motion.img src={src} alt="" className="case-thumbnail-image" />
+                        </button>
                       ))}
                     </div>
-                  </>
-                )}
+                  )}
+                </aside>
 
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent md:bg-gradient-to-r opacity-30 pointer-events-none" />
-              </div>
-              )}
-
-              {/* Content Section */}
-              <motion.div layoutScroll data-lenis-prevent className={`project-modal-scroll w-full min-w-0 ${selectedProject.images.length > 0 ? "md:w-1/2" : "max-w-3xl mx-auto"} p-8 md:p-12 flex flex-col overflow-y-auto`}>
-                <motion.h3
-                  id="project-modal-title"
-                  layoutId={`project-title-${selectedProject.id}`}
-                  transition={{ layout: projectLayoutTransition }}
-                  className="text-2xl md:text-4xl font-bold text-white mb-6 pr-8"
-                >
-                  {selectedProject.title}
-                </motion.h3>
-
-                <div className="flex flex-wrap gap-6 mb-8 text-sm font-sans text-gray-400">
-                  <div className="flex items-center gap-2">
-                    <User className="w-4 h-4" />
-                    <span>{selectedProject.role}</span>
+                <motion.div layoutScroll data-lenis-prevent className="case-copy project-modal-scroll">
+                  <motion.h3
+                    id="project-modal-title"
+                    layoutId={`project-title-${selectedProject.id}`}
+                    transition={{ layout: projectLayoutTransition }}
+                  >{selectedProject.title}</motion.h3>
+                  <div className="case-meta">
+                    <div><User size={14} /><span>{selectedProject.role}</span></div>
+                    {selectedProject.duration && <div><Calendar size={14} /><span>{selectedProject.duration}</span></div>}
                   </div>
-                  {selectedProject.duration && <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4" />
-                    <span>{selectedProject.duration}</span>
-                  </div>}
-                </div>
+                  <motion.p
+                    layoutId={`project-desc-${selectedProject.id}`}
+                    transition={{ layout: projectLayoutTransition }}
+                    className="case-description"
+                  >{selectedProject.description}</motion.p>
 
-                <motion.p
-                  layoutId={`project-desc-${selectedProject.id}`}
-                  transition={{ layout: projectLayoutTransition }}
-                  className="font-sans text-gray-300 leading-relaxed mb-8"
-                >
-                  {selectedProject.description}
-                </motion.p>
-
-                {selectedProject.contributions && (
-                  <div className="mb-8">
-                    <h4 className="text-sm uppercase tracking-widest text-gray-500 font-sans mb-4">My Contribution</h4>
-                    <ul className="list-disc list-inside font-sans text-gray-300 space-y-2">
-                      {selectedProject.contributions.map((contribution) => <li key={contribution}>{contribution}</li>)}
-                    </ul>
-                  </div>
-                )}
-
-                <div className="mb-8">
-                  <h4 className="text-sm uppercase tracking-widest text-gray-500 font-sans mb-4">Key Features</h4>
-                  <ul className="list-disc list-inside font-sans text-gray-300 space-y-2">
-                    {selectedProject.keyFeatures.map((feature, idx) => (
-                      <li key={idx}>{feature}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                {selectedProject.outcome && (
-                  <div className="mb-8 border-l-2 border-gray-600 pl-4">
-                    <h4 className="text-sm uppercase tracking-widest text-gray-500 font-sans mb-4">Project Outcome</h4>
-                    <p className="font-sans text-gray-300 leading-relaxed">{selectedProject.outcome}</p>
-                  </div>
-                )}
-
-                <motion.div layoutId={`project-tags-${selectedProject.id}`} transition={{ layout: projectLayoutTransition }} className="flex flex-wrap gap-2 mb-10">
-                  {selectedProject.tags.map((tag, i) => (
-                    <span
-                      key={i}
-                      className="px-3 py-1 border border-gray-700 text-gray-300 text-xs uppercase tracking-wider font-sans"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                  {selectedProject.contributions && (
+                    <section className="case-detail-section">
+                      <h4>My contribution</h4>
+                      <ul>{selectedProject.contributions.map(contribution => <li key={contribution}>{contribution}</li>)}</ul>
+                    </section>
+                  )}
+                  <section className="case-detail-section">
+                    <h4>What it does</h4>
+                    <ul>{selectedProject.keyFeatures.map(feature => <li key={feature}>{feature}</li>)}</ul>
+                  </section>
+                  {selectedProject.outcome && (
+                    <section className="case-outcome">
+                      <h4>Project outcome</h4>
+                      <p>{selectedProject.outcome}</p>
+                    </section>
+                  )}
+                  <motion.div layoutId={`project-tags-${selectedProject.id}`} transition={{ layout: projectLayoutTransition }} className="case-tags">
+                    {selectedProject.tags.map(tag => <span key={tag}>{tag}</span>)}
+                  </motion.div>
+                  {(selectedProject.githubLink && selectedProject.githubLink !== "#" || selectedProject.liveLink && selectedProject.liveLink !== "#") && (
+                    <div className="case-links">
+                      {selectedProject.githubLink && selectedProject.githubLink !== "#" && <a href={selectedProject.githubLink} target="_blank" rel="noopener noreferrer"><FaGithub size={15} /> Source code <ArrowUpRight size={14} /></a>}
+                      {selectedProject.liveLink && selectedProject.liveLink !== "#" && <a href={selectedProject.liveLink} target="_blank" rel="noopener noreferrer"><ExternalLink size={15} /> Live demo <ArrowUpRight size={14} /></a>}
+                    </div>
+                  )}
                 </motion.div>
-
-                {/* Action Buttons */}
-                {(selectedProject.githubLink && selectedProject.githubLink !== "#" || selectedProject.liveLink && selectedProject.liveLink !== "#") && <div className="flex gap-4 mt-auto">
-                  {selectedProject.githubLink && selectedProject.githubLink !== "#" && <a
-                    href={selectedProject.githubLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 py-3 bg-white text-black font-semibold font-sans hover:bg-gray-200 transition-colors"
-                  >
-                    <FaGithub className="w-4 h-4" />
-                    Source Code
-                  </a>}
-                  {selectedProject.liveLink && selectedProject.liveLink !== "#" && <a
-                    href={selectedProject.liveLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 py-3 border border-gray-700 text-white font-semibold font-sans hover:bg-[#111111] transition-colors"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    Live Demo
-                  </a>}
-                </div>}
               </motion.div>
             </motion.div>
           </motion.div>
