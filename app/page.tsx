@@ -9,12 +9,12 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col">
       <Hero />
-      <Experience />
       <Projects />
+      <Experience />
       <SkillsEducation />
       <Certifications />
       <Contact />
-      <footer className="py-8 text-center text-gray-600 font-sans text-sm border-t border-gray-900">
+      <footer className="studio-footer">
         &copy; {new Date().getFullYear()} Sendi Setiawan. All rights reserved.
       </footer>
     </main>

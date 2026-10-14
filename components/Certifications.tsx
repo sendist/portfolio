@@ -1,7 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Award, X } from "lucide-react";
+import { ArrowRight, X } from "lucide-react";
 import { useRef, useState } from "react";
 
 const certificates = [
@@ -30,7 +31,7 @@ export default function Certifications() {
   };
 
   return (
-    <section className="py-24 px-6 md:px-12 lg:px-24 border-t border-gray-900 relative overflow-hidden">
+    <section className="certifications-section py-24 px-6 md:px-12 lg:px-24 border-t border-gray-900 relative overflow-hidden">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -73,10 +74,15 @@ export default function Certifications() {
           >
             <div
               onClick={() => setSelectedImage(cert.image)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setSelectedImage(cert.image); } }}
               className="relative aspect-[4/3] w-full overflow-hidden border border-gray-800 bg-[#050505] cursor-pointer"
             >
               {/* Image with grayscale-to-color transition */}
-              <img
+              <Image
+                fill
+                sizes="280px"
                 src={cert.image}
                 alt={cert.title}
                 className="object-cover w-full h-full grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
@@ -108,6 +114,7 @@ export default function Certifications() {
           >
             <button
               onClick={() => setSelectedImage(null)}
+              aria-label="Close certificate preview"
               className="absolute top-6 right-6 md:top-12 md:right-12 p-2 bg-gray-900 rounded-full text-white hover:bg-gray-800 transition-colors"
             >
               <X className="w-6 h-6" />
