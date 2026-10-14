@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import ProjectArtwork from "@/components/ProjectArtwork";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, ExternalLink, X, Calendar, User, ChevronLeft, ChevronRight } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
@@ -27,7 +27,12 @@ const projects: Project[] = [
     title: "Tutur — Communication Practice",
     description: "An iOS app helping entry-level professionals practice speaking and active listening through realistic workplace scenarios, from technical disagreements to deadline-versus-quality discussions. Spoken responses, transcription, AI feedback, and practice history support a structured practice experience.",
     role: "Developer & Project Manager",
-    images: [],
+    images: [
+      "/projects/Tutur/Slide 16_9 - 9@2x.png",
+      "/projects/Tutur/Group 33.png",
+      "/projects/Tutur/iPhone 17 - 10.png",
+      "/projects/Tutur/iPhone 17 - 13.png",
+    ],
     tags: ["iOS", "Communication", "AI Feedback", "Product Development"],
     contributions: [
       "Contributed to product ideation and workplace communication practice concepts.",
@@ -46,7 +51,11 @@ const projects: Project[] = [
     title: "PadTitur — Music Notation",
     description: "An iPad app for composers and people who prefer handwritten music notation. It combines Apple Pencil input, handwritten notation recognition, music playback, and sheet management in one workspace.",
     role: "Designer, Developer & Project Manager",
-    images: [],
+    images: [
+      "/projects/PadTitur/pad.png",
+      "/projects/PadTitur/IMG_0039.PNG",
+      "/projects/PadTitur/IMG_0040.PNG",
+    ],
     tags: ["iPad", "PencilKit", "Core ML", "Product Design"],
     contributions: [
       "Designed the interface and experience for writing and managing music sheets.",
@@ -255,11 +264,23 @@ export default function Projects() {
             className={`project-card group ${["tutur", "padtitur"].includes(project.id) ? "project-featured" : ""}`}
           >
             <div className={`project-cover cover-${project.id}`}>
-              {project.id === "tutur" ? <div className="tutur-art" aria-hidden="true"><span>tutur</span><div className="voice-bars">{[22, 40, 68, 36, 90, 56, 112, 74, 46, 82, 32, 60, 24].map((height, index) => <i key={index} style={{ height }} />)}</div><p>Find your voice.<br />Shape your message.</p></div>
-              : project.id === "padtitur" ? <div className="padtitur-art" aria-hidden="true"><span>PadTitur</span><div className="music-staff"><b>𝄞</b><i>♪</i><i>♫</i><i>♩</i></div><p>From a handwritten note<br />to a musical idea.</p></div>
-              : project.images[0]?.startsWith("/") ? <Image src={project.images[0]} alt="" fill sizes="(max-width: 700px) 100vw, (max-width: 1000px) 50vw, 33vw" /> : <div className="system-art" aria-hidden="true"><span>{project.id === "ai-rag" ? "{ context → insight }" : "{ patterns → meaning }"}</span></div>}
+              {project.id === "tutur" ? (
+                <div className="tutur-art" aria-hidden="true">
+                  <span>tutur</span>
+                  <div className="voice-bars">
+                    {[22, 40, 68, 36, 90, 56, 112, 74, 46, 82, 32, 60, 24].map((height, index) => <i key={index} style={{ height }} />)}
+                  </div>
+                  <p>Find your voice.<br />Shape your message.</p>
+                </div>
+              ) : project.id === "padtitur" ? (
+                <div className="padtitur-art" aria-hidden="true">
+                  <span>PadTitur</span>
+                  <div className="music-staff"><b>𝄞</b><i>♪</i><i>♫</i><i>♩</i></div>
+                  <p>From a handwritten note<br />to a musical idea.</p>
+                </div>
+              ) : <ProjectArtwork id={project.id} />}
               <span className="cover-category">{categoryFor(project)}</span>
-              {["tutur", "padtitur"].includes(project.id) && <span className="cover-caption">Concept illustration</span>}
+              <span className="cover-caption">Concept illustration</span>
             </div>
             <div className="project-card-content">
             <div className="flex justify-between items-start">
