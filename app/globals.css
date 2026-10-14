@@ -26,6 +26,57 @@ h1, h2, h3, h4, h5, h6 {
   color: #111111;
 }
 
+/* Keep project modal scrolling in the portfolio's charcoal palette. */
+.project-modal-scroll {
+  min-height: 0;
+  overscroll-behavior-y: contain;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #525252 #0a0a0a;
+}
+
+@supports selector(::-webkit-scrollbar) {
+  .project-modal-scroll {
+    scrollbar-width: auto;
+    scrollbar-color: auto;
+  }
+
+  .project-modal-scroll::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .project-modal-scroll::-webkit-scrollbar-track {
+    background: #0a0a0a;
+    margin-block: 16px;
+  }
+
+  .project-modal-scroll::-webkit-scrollbar-thumb {
+    background: #525252;
+    border: 2px solid #0a0a0a;
+    border-radius: 8px;
+    min-height: 40px;
+  }
+
+  .project-modal-scroll::-webkit-scrollbar-thumb:hover {
+    background: #737373;
+  }
+
+  .project-modal-scroll::-webkit-scrollbar-thumb:active {
+    background: #a3a3a3;
+  }
+
+  .project-modal-scroll::-webkit-scrollbar-corner {
+    background: #0a0a0a;
+  }
+}
+
+@media (forced-colors: active) {
+  .project-modal-scroll {
+    scrollbar-color: auto;
+  }
+}
+
 /* Lenis */
 html.lenis, html.lenis body {
   height: auto;

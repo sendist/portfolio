@@ -5,7 +5,60 @@ import { ArrowUpRight, ExternalLink, X, Calendar, User, ChevronLeft, ChevronRigh
 import { FaGithub } from "react-icons/fa";
 import { useState, useEffect } from "react";
 
-const projects = [
+type Project = {
+  id: string;
+  title: string;
+  description: string;
+  role: string;
+  duration?: string;
+  images: string[];
+  tags: string[];
+  githubLink?: string;
+  liveLink?: string;
+  keyFeatures: string[];
+  contributions?: string[];
+  outcome?: string;
+};
+
+const projects: Project[] = [
+  {
+    id: "tutur",
+    title: "Tutur — Communication Practice",
+    description: "An iOS app helping entry-level professionals practice speaking and active listening through realistic workplace scenarios, from technical disagreements to deadline-versus-quality discussions. Spoken responses, transcription, AI feedback, and practice history support a structured practice experience.",
+    role: "Developer & Project Manager",
+    images: [],
+    tags: ["iOS", "Communication", "AI Feedback", "Product Development"],
+    contributions: [
+      "Contributed to product ideation and workplace communication practice concepts.",
+      "Worked on application development and coding with the team.",
+      "Managed project planning and coordination."
+    ],
+    keyFeatures: [
+      "Workplace scenarios for speaking and active listening practice",
+      "AI feedback on structure, clarity, and audience fit",
+      "Practice history and progress tracking"
+    ],
+    outcome: "Brings workplace scenarios, speaking and listening practice, AI-powered feedback, and progress tracking into one communication practice experience."
+  },
+  {
+    id: "padtitur",
+    title: "PadTitur — Music Notation",
+    description: "An iPad app for composers and people who prefer handwritten music notation. It combines Apple Pencil input, handwritten notation recognition, music playback, and sheet management in one workspace.",
+    role: "Designer, Developer & Project Manager",
+    images: [],
+    tags: ["iPad", "PencilKit", "Core ML", "Product Design"],
+    contributions: [
+      "Designed the interface and experience for writing and managing music sheets.",
+      "Developed Apple Pencil input with PencilKit and worked on Core ML notation recognition.",
+      "Coordinated project planning and team tasks as project manager."
+    ],
+    keyFeatures: [
+      "Apple Pencil handwriting and notation recognition",
+      "Music playback and sheet editing",
+      "Library organization and sharing"
+    ],
+    outcome: "Combines handwriting, notation recognition, playback, and sheet management in a single iPad workspace."
+  },
   {
     id: "ai-rag",
     title: "AI-RAG CV & Project Evaluator Backend",
@@ -119,8 +172,6 @@ const projects = [
     ]
   },
 ];
-
-type Project = typeof projects[0];
 
 const projectLayoutTransition = { duration: 0.4, ease: "easeInOut" as const };
 
@@ -245,6 +296,7 @@ export default function Projects() {
               </button>
 
               {/* Image Section / Slider */}
+              {selectedProject.images.length > 0 && (
               <div className="w-full md:w-1/2 h-64 md:h-auto relative bg-[#050505] border-b md:border-b-0 md:border-r border-gray-800 flex items-center justify-center overflow-hidden">
                 <AnimatePresence mode="wait">
                   <motion.img
@@ -291,9 +343,10 @@ export default function Projects() {
 
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent md:bg-gradient-to-r opacity-30 pointer-events-none" />
               </div>
+              )}
 
               {/* Content Section */}
-              <motion.div layoutScroll className="w-full md:w-1/2 p-8 md:p-12 flex flex-col overflow-y-auto">
+              <motion.div layoutScroll data-lenis-prevent className={`project-modal-scroll w-full ${selectedProject.images.length > 0 ? "md:w-1/2" : "max-w-3xl mx-auto"} p-8 md:p-12 flex flex-col overflow-y-auto`}>
                 <motion.h3
                   layoutId={`project-title-${selectedProject.id}`}
                   transition={{ layout: projectLayoutTransition }}
@@ -307,10 +360,10 @@ export default function Projects() {
                     <User className="w-4 h-4" />
                     <span>{selectedProject.role}</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  {selectedProject.duration && <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4" />
                     <span>{selectedProject.duration}</span>
-                  </div>
+                  </div>}
                 </div>
 
                 <motion.p
@@ -321,6 +374,15 @@ export default function Projects() {
                   {selectedProject.description}
                 </motion.p>
 
+                {selectedProject.contributions && (
+                  <div className="mb-8">
+                    <h4 className="text-sm uppercase tracking-widest text-gray-500 font-sans mb-4">My Contribution</h4>
+                    <ul className="list-disc list-inside font-sans text-gray-300 space-y-2">
+                      {selectedProject.contributions.map((contribution) => <li key={contribution}>{contribution}</li>)}
+                    </ul>
+                  </div>
+                )}
+
                 <div className="mb-8">
                   <h4 className="text-sm uppercase tracking-widest text-gray-500 font-sans mb-4">Key Features</h4>
                   <ul className="list-disc list-inside font-sans text-gray-300 space-y-2">
@@ -329,6 +391,13 @@ export default function Projects() {
                     ))}
                   </ul>
                 </div>
+
+                {selectedProject.outcome && (
+                  <div className="mb-8 border-l-2 border-gray-600 pl-4">
+                    <h4 className="text-sm uppercase tracking-widest text-gray-500 font-sans mb-4">Project Outcome</h4>
+                    <p className="font-sans text-gray-300 leading-relaxed">{selectedProject.outcome}</p>
+                  </div>
+                )}
 
                 <motion.div layoutId={`project-tags-${selectedProject.id}`} transition={{ layout: projectLayoutTransition }} className="flex flex-wrap gap-2 mb-10">
                   {selectedProject.tags.map((tag, i) => (
@@ -342,8 +411,8 @@ export default function Projects() {
                 </motion.div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-4 mt-auto">
-                  <a
+                {(selectedProject.githubLink && selectedProject.githubLink !== "#" || selectedProject.liveLink && selectedProject.liveLink !== "#") && <div className="flex gap-4 mt-auto">
+                  {selectedProject.githubLink && selectedProject.githubLink !== "#" && <a
                     href={selectedProject.githubLink}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -351,8 +420,8 @@ export default function Projects() {
                   >
                     <FaGithub className="w-4 h-4" />
                     Source Code
-                  </a>
-                  <a
+                  </a>}
+                  {selectedProject.liveLink && selectedProject.liveLink !== "#" && <a
                     href={selectedProject.liveLink}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -360,8 +429,8 @@ export default function Projects() {
                   >
                     <ExternalLink className="w-4 h-4" />
                     Live Demo
-                  </a>
-                </div>
+                  </a>}
+                </div>}
               </motion.div>
             </motion.div>
           </motion.div>
