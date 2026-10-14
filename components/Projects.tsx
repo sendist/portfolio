@@ -122,6 +122,8 @@ const projects = [
 
 type Project = typeof projects[0];
 
+const projectLayoutTransition = { duration: 0.4, ease: "easeInOut" as const };
+
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -130,7 +132,6 @@ export default function Projects() {
   useEffect(() => {
     if (selectedProject) {
       document.body.style.overflow = "hidden";
-      setCurrentImageIndex(0); // Reset image index when a new project is selected
     } else {
       document.body.style.overflow = "unset";
     }
@@ -170,16 +171,20 @@ export default function Projects() {
           <motion.div
             key={project.id}
             layoutId={`project-container-${project.id}`}
-            onClick={() => setSelectedProject(project)}
+            onClick={() => {
+              setCurrentImageIndex(0);
+              setSelectedProject(project);
+            }}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6, delay: (index % 3) * 0.15 }}
+            transition={{ duration: 0.6, delay: (index % 3) * 0.15, layout: projectLayoutTransition }}
             className="group relative border border-gray-800 p-8 flex flex-col gap-6 hover:bg-[#111111] cursor-pointer transition-colors duration-300 ease-out h-full"
           >
             <div className="flex justify-between items-start">
               <motion.h3
                 layoutId={`project-title-${project.id}`}
+                transition={{ layout: projectLayoutTransition }}
                 className="text-xl font-bold text-gray-100 group-hover:text-white transition-colors duration-300"
               >
                 {project.title}
@@ -189,12 +194,13 @@ export default function Projects() {
 
             <motion.p
               layoutId={`project-desc-${project.id}`}
+              transition={{ layout: projectLayoutTransition }}
               className="font-sans text-gray-400 text-sm leading-relaxed flex-grow line-clamp-3"
             >
               {project.description}
             </motion.p>
 
-            <motion.div layoutId={`project-tags-${project.id}`} className="flex flex-wrap gap-2 mt-auto">
+            <motion.div layoutId={`project-tags-${project.id}`} transition={{ layout: projectLayoutTransition }} className="flex flex-wrap gap-2 mt-auto">
               {project.tags.slice(0, 3).map((tag, i) => (
                 <span
                   key={i}
@@ -216,7 +222,7 @@ export default function Projects() {
       {/* Expanded Modal */}
       <AnimatePresence>
         {selectedProject && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8">
+          <motion.div layoutRoot className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -227,6 +233,7 @@ export default function Projects() {
 
             <motion.div
               layoutId={`project-container-${selectedProject.id}`}
+              transition={{ layout: projectLayoutTransition }}
               className="relative w-full max-w-5xl bg-[#0a0a0a] border border-gray-800 flex flex-col md:flex-row overflow-hidden max-h-[90vh] shadow-2xl z-10"
             >
               {/* Close Button */}
@@ -286,9 +293,10 @@ export default function Projects() {
               </div>
 
               {/* Content Section */}
-              <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col overflow-y-auto">
+              <motion.div layoutScroll className="w-full md:w-1/2 p-8 md:p-12 flex flex-col overflow-y-auto">
                 <motion.h3
                   layoutId={`project-title-${selectedProject.id}`}
+                  transition={{ layout: projectLayoutTransition }}
                   className="text-2xl md:text-4xl font-bold text-white mb-6"
                 >
                   {selectedProject.title}
@@ -307,6 +315,7 @@ export default function Projects() {
 
                 <motion.p
                   layoutId={`project-desc-${selectedProject.id}`}
+                  transition={{ layout: projectLayoutTransition }}
                   className="font-sans text-gray-300 leading-relaxed mb-8"
                 >
                   {selectedProject.description}
@@ -321,7 +330,7 @@ export default function Projects() {
                   </ul>
                 </div>
 
-                <motion.div layoutId={`project-tags-${selectedProject.id}`} className="flex flex-wrap gap-2 mb-10">
+                <motion.div layoutId={`project-tags-${selectedProject.id}`} transition={{ layout: projectLayoutTransition }} className="flex flex-wrap gap-2 mb-10">
                   {selectedProject.tags.map((tag, i) => (
                     <span
                       key={i}
@@ -353,9 +362,9 @@ export default function Projects() {
                     Live Demo
                   </a>
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </section>
