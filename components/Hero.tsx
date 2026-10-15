@@ -15,7 +15,7 @@ export default function Hero() {
   return (
     <section className="studio-hero" id="top">
       <nav className="studio-nav" aria-label="Main navigation">
-        <a href="#top" className="wordmark" aria-label="Sendi Setiawan home">sendi<span aria-hidden="true">✳</span></a>
+        <a href="#top" className="wordmark" aria-label="Sendi Setiawan home">sendist</a>
         <div><a href="#projects">Work</a><a href="#experience">About</a><a href="#contact">Contact <ArrowUpRight size={14} /></a></div>
       </nav>
       <div className="hero-intro"><span>Sendi Setiawan</span><span>Software engineer / Jakarta, ID</span></div>

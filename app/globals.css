@@ -604,8 +604,8 @@ button {
 }
 
 .contact-section {
-  background: #cdc2ff;
-  color: #30233e;
+  background: #25222e;
+  color: #f0eee8;
 }
 
 .contact-section > div:first-child {
@@ -621,24 +621,28 @@ button {
 }
 
 .contact-section p {
-  color: #56426b;
+  color: #aaa6b5;
   font-size: 16px;
   max-width: 430px;
 }
 
 .contact-section a {
-  border-color: #a797c6;
-  background: transparent;
-  color: #30233e;
+  border-color: #51475f;
+  background: #17161c;
+  color: #f0eee8;
 }
 
 .contact-section a:hover {
-  background: #c0b1ef;
-  border-color: #766091;
+  background: #302b3c;
+  border-color: #a797c6;
 }
 
-.contact-section a span, .contact-section a svg {
-  color: #4a365d;
+.contact-section a span {
+  color: #f0eee8;
+}
+
+.contact-section a span:first-child, .contact-section a svg {
+  color: #cdc2ff;
 }
 
 .studio-footer {
@@ -1042,4 +1046,67 @@ button {
 }
 @media (max-width: 700px) {
   .hero-portrait { aspect-ratio: 1; }
+}
+
+/* Fit the desktop introduction to its viewport; retain the existing columns. */
+@media (min-width: 701px) {
+  .studio-hero {
+    display: flex;
+    flex-direction: column;
+    min-height: 100svh;
+  }
+
+  .studio-nav {
+    flex-shrink: 0;
+    padding-block: 18px;
+  }
+
+  .hero-intro {
+    flex-shrink: 0;
+    padding-block: 16px;
+  }
+
+  .hero-stage {
+    flex: 1;
+    padding-block: 16px 24px;
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(58px, min(8.7vw, 16svh), 128px);
+  }
+
+  .hero-copy > p {
+    margin-block: 24px 22px;
+  }
+
+  .machine-heading {
+    padding-block: 12px;
+  }
+
+  .hero-portrait {
+    aspect-ratio: auto;
+    height: clamp(140px, calc(100svh - 440px), 340px);
+  }
+
+  .hero-portrait img {
+    object-position: center 20%;
+  }
+
+  .discipline-tabs button {
+    padding-block: 10px;
+  }
+
+  .machine-note {
+    min-height: 108px;
+    padding-block: 13px 16px;
+  }
+
+  .machine-note span {
+    margin-top: 9px;
+  }
+
+  .hero-bottom {
+    flex-shrink: 0;
+    padding-block: 16px;
+  }
 }

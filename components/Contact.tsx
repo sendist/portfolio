@@ -25,8 +25,8 @@ const links = [
   },
   {
     name: "Instagram",
-    value: "@sendis10",
-    url: "https://instagram.com/sendis10",
+    value: "@sendis__",
+    url: "https://instagram.com/sendis__",
     icon: FaInstagram,
   },
 ];
