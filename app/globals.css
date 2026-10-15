@@ -1009,3 +1009,37 @@ button {
   .credentials-count { text-align: left; margin-top: 20px; flex-direction: row; align-items: center; gap: 12px; }.credentials-count strong { font-size: 36px; }.credentials-count span { margin: 0; }.credentials-search { width: 100%; }.credentials-search input { flex: 1; width: 100%; }.credentials-grid { grid-template-columns: 1fr; }.credential-record, .credential-record:nth-child(even) { padding: 20px 0; border-left: 0; gap: 14px; }.credential-thumbnail { width: 76px; height: 58px; }
   .certificate-overlay { padding: 12px; }.certificate-document { --certificate-inset: 12px; }.certificate-dialog header { padding: 14px 18px; }.certificate-dialog header h3 { font-size: 15px; }
 }
+
+/* The personal introduction keeps the studio frame and discipline controls. */
+.hero-portrait {
+  position: relative;
+  aspect-ratio: 1.08;
+  overflow: hidden;
+  background: #80796f;
+}
+.hero-portrait img {
+  object-fit: cover;
+  object-position: center 32%;
+}
+.hero-portrait figcaption {
+  position: absolute;
+  inset: auto 0 0;
+  padding: 52px 22px 20px;
+  background: linear-gradient(transparent, #17161cc9);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.hero-portrait figcaption span:first-child {
+  color: #f0eee8;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -.04em;
+}
+.hero-portrait figcaption span:last-child {
+  color: #e2dce8;
+  font-size: 10px;
+}
+@media (max-width: 700px) {
+  .hero-portrait { aspect-ratio: 1; }
+}
