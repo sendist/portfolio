@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { Plus, ArrowUpRight } from "lucide-react";
 
 const experiences = [
   {
@@ -37,57 +37,24 @@ const experiences = [
 
 export default function Experience() {
   return (
-    <section className="py-24 px-6 md:px-12 lg:px-24">
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6 }}
-        className="text-3xl md:text-5xl font-bold mb-16 tracking-tight uppercase"
-      >
-        Experience
-      </motion.h2>
-
-      <div className="flex flex-col gap-12 border-l border-gray-800 pl-6 md:pl-10">
-        {experiences.map((exp, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="relative"
-          >
-            {/* Timeline dot */}
-            <div className="absolute -left-[31px] md:-left-[47px] top-1.5 w-3 h-3 bg-gray-400 rounded-full ring-4 ring-[#111111]" />
-
-            <div className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-4 mb-2">
-              <h3 className="text-xl md:text-2xl font-bold text-gray-100">
-                {exp.title}
-              </h3>
-              <span className="text-gray-500 font-sans text-sm tracking-wider uppercase hidden md:inline">
-                |
-              </span>
-              <span className="text-gray-300 font-medium font-sans">
-                {exp.company}
-              </span>
+    <section id="experience" className="journey-section section-space">
+      <header className="section-heading journey-heading">
+        <div><span className="section-kicker">The work behind the work</span><h2>Experience<span>.</span></h2></div>
+        <p>Different environments.<br />A growing perspective.</p>
+      </header>
+      <div className="journey-list">
+        {experiences.map((experience, index) => (
+          <details key={experience.company} className="journey-entry" open={index === 0}>
+            <summary>
+              <div className="journey-period"><span className="journey-node" aria-hidden="true" /><span>{experience.date}</span></div>
+              <div className="journey-identity"><span>{experience.title}</span><h3>{experience.company}</h3><small>{experience.location}</small></div>
+              <span className="journey-toggle" aria-hidden="true"><Plus size={20} /></span>
+            </summary>
+            <div className="journey-content">
+              <div className="journey-note"><ArrowUpRight size={20} /><span>{index === 0 ? "Product thinking meets practice." : index === 1 ? "Interfaces meet infrastructure." : "Understanding the workflow."}</span></div>
+              <ul>{experience.points.map(point => <li key={point}>{point}</li>)}</ul>
             </div>
-            
-            <div className="flex items-center gap-3 text-xs uppercase tracking-widest text-gray-500 font-sans mb-4">
-              <span>{exp.date}</span>
-              <span>&middot;</span>
-              <span>{exp.location}</span>
-            </div>
-
-            <ul className="flex flex-col gap-3 font-sans text-gray-400 leading-relaxed max-w-3xl">
-              {exp.points.map((point, i) => (
-                <li key={i} className="flex gap-3">
-                  <span className="text-gray-600 select-none">-</span>
-                  <span>{point}</span>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
+          </details>
         ))}
       </div>
     </section>

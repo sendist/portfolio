@@ -1,9 +1,10 @@
 "use client";
 
+import ProjectArtwork from "@/components/ProjectArtwork";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, ExternalLink, X, Calendar, User, ChevronLeft, ChevronRight } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 type Project = {
   id: string;
@@ -26,7 +27,12 @@ const projects: Project[] = [
     title: "Tutur — Communication Practice",
     description: "An iOS app helping entry-level professionals practice speaking and active listening through realistic workplace scenarios, from technical disagreements to deadline-versus-quality discussions. Spoken responses, transcription, AI feedback, and practice history support a structured practice experience.",
     role: "Developer & Project Manager",
-    images: [],
+    images: [
+      "/projects/Tutur/Slide 16_9 - 9@2x.png",
+      "/projects/Tutur/Group 33.png",
+      "/projects/Tutur/iPhone 17 - 10.png",
+      "/projects/Tutur/iPhone 17 - 13.png",
+    ],
     tags: ["iOS", "Communication", "AI Feedback", "Product Development"],
     contributions: [
       "Contributed to product ideation and workplace communication practice concepts.",
@@ -45,7 +51,11 @@ const projects: Project[] = [
     title: "PadTitur — Music Notation",
     description: "An iPad app for composers and people who prefer handwritten music notation. It combines Apple Pencil input, handwritten notation recognition, music playback, and sheet management in one workspace.",
     role: "Designer, Developer & Project Manager",
-    images: [],
+    images: [
+      "/projects/PadTitur/pad.png",
+      "/projects/PadTitur/IMG_0039.PNG",
+      "/projects/PadTitur/IMG_0040.PNG",
+    ],
     tags: ["iPad", "PencilKit", "Core ML", "Product Design"],
     contributions: [
       "Designed the interface and experience for writing and managing music sheets.",
@@ -65,7 +75,13 @@ const projects: Project[] = [
     description: "Automated candidate evaluation system using a Retrieval-Augmented Generation (RAG) pipeline with local MiniLM embeddings and a Qdrant vector database for semantic retrieval. Integrated Gemini 2.5 Flash LLM using deterministic prompts and a fixed chunking strategy.",
     role: "Backend Engineer",
     duration: "2024",
-    images: ["https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&auto=format&fit=crop&q=80"],
+    images: [
+      "/projects/rag-cv-evaluator/Screenshot 2026-10-15 at 20.08.34.png",
+      "/projects/rag-cv-evaluator/Screenshot 2026-10-15 at 20.08.45.png",
+      "/projects/rag-cv-evaluator/Screenshot 2026-10-15 at 20.09.10.png",
+      "/projects/rag-cv-evaluator/Screenshot 2026-10-15 at 20.09.18.png",
+      "/projects/rag-cv-evaluator/Screenshot 2026-10-15 at 20.09.24.png"
+],
     tags: ["RAG", "Qdrant", "Gemini LLM", "MiniLM"],
     githubLink: "#",
     liveLink: "#",
@@ -87,7 +103,7 @@ const projects: Project[] = [
     liveLink: "#",
     keyFeatures: [
       "Integrated SE attention mechanisms into 3D U-Net",
-      "Boosted F-beta score by ~7%",
+      "F-beta 0.643 → 0.714 in a matched configuration on data sample 1",
       "Interactive data visualization built with Streamlit"
     ]
   },
@@ -110,7 +126,7 @@ const projects: Project[] = [
   {
     id: "openedx-lms",
     title: "Open edX LMS Enhancement",
-    description: "Spearheaded a 19-member engineering team across 6 sub-teams to customize and scale an Open edX-based Learning Management System. Directed the Agile project lifecycle to deliver 6 custom features that improved learner engagement.",
+    description: "Spearheaded a 19-member engineering team across 6 sub-teams to customize and scale an Open edX-based Learning Management System. Directed the Agile project lifecycle to deliver 6 custom features for learners and instructors.",
     role: "Engineering Team Lead",
     duration: "2022 - 2023",
     images: ["/projects/edx.png", "/projects/edx2.png", "/projects/edx3.png", "/projects/edx4.png", "/projects/edx5.png", "/projects/edx6.png"],
@@ -118,9 +134,9 @@ const projects: Project[] = [
     githubLink: "#",
     liveLink: "#",
     keyFeatures: [
-      "Managed 19 engineers across 6 Agile sub-teams",
+      "Led 19 students across 6 sub-teams",
       "Delivered 6 major custom LMS features on schedule",
-      "Scaled infrastructure for high concurrent student loads"
+      "Coordinated development and final feature integration"
     ]
   },
   {
@@ -161,7 +177,7 @@ const projects: Project[] = [
     description: "Developed a desktop application processing transaction data to identify purchasing patterns. Implemented the Apriori algorithm with optimized tree-structures and built a Java Swing GUI for visualizing association rules (support/confidence).",
     role: "Software Developer",
     duration: "2021",
-    images: ["https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80"],
+    images: ["/projects/analyst-sr/image analyst.png"],
     tags: ["Java Swing", "Apriori Algorithm", "Data Mining", "OOP"],
     githubLink: "#",
     liveLink: "#",
@@ -178,6 +194,28 @@ const projectLayoutTransition = { duration: 0.4, ease: "easeInOut" as const };
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [filter, setFilter] = useState("All work");
+  const modalRef = useRef<HTMLDivElement>(null);
+  const categories = ["All work", "Apps", "AI & research", "Web & systems"];
+  const categoryFor = (project: Project) => ["tutur", "padtitur"].includes(project.id) ? "Apps" : ["ai-rag", "3d-unet", "face-emotion"].includes(project.id) ? "AI & research" : "Web & systems";
+  const visibleProjects = projects.filter(project => filter === "All work" || categoryFor(project) === filter);
+
+  useEffect(() => {
+    if (!selectedProject) return;
+    const previousFocus = document.activeElement as HTMLElement | null;
+    modalRef.current?.querySelector<HTMLButtonElement>("button")?.focus({ preventScroll: true });
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelectedProject(null);
+      if (event.key !== "Tab") return;
+      const controls = modalRef.current?.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], [tabindex="0"]');
+      if (!controls?.length) return;
+      const first = controls[0], last = controls[controls.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    };
+    document.addEventListener("keydown", handleKey);
+    return () => { document.removeEventListener("keydown", handleKey); previousFocus?.focus({ preventScroll: true }); };
+  }, [selectedProject]);
 
   // Prevent background scrolling when modal is open
   useEffect(() => {
@@ -206,22 +244,21 @@ export default function Projects() {
   };
 
   return (
-    <section className="py-24 px-6 md:px-12 lg:px-24 bg-[#0a0a0a] relative">
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6 }}
-        className="text-3xl md:text-5xl font-bold mb-16 tracking-tight uppercase"
-      >
-        Projects
-      </motion.h2>
+    <section id="projects" className="projects-section py-24 px-6 md:px-12 lg:px-24 relative">
+      <div className="section-heading"><div><span className="section-kicker">Ideas made tangible</span><h2>Selected work<span>.</span></h2></div><p>Products, experiments, and systems.<br />A closer look at what I build.</p></div>
+      <div className="project-filters" aria-label="Filter projects">{categories.map(category => <button key={category} aria-pressed={filter === category} onClick={() => setFilter(category)}>{category}</button>)}</div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {projects.map((project, index) => (
+      <div className="project-grid">
+        {visibleProjects.map((project, index) => (
           <motion.div
             key={project.id}
             layoutId={`project-container-${project.id}`}
+            role="button"
+            tabIndex={0}
+            aria-label={`View ${project.title}`}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setCurrentImageIndex(0); setSelectedProject(project); }
+            }}
             onClick={() => {
               setCurrentImageIndex(0);
               setSelectedProject(project);
@@ -230,8 +267,28 @@ export default function Projects() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6, delay: (index % 3) * 0.15, layout: projectLayoutTransition }}
-            className="group relative border border-gray-800 p-8 flex flex-col gap-6 hover:bg-[#111111] cursor-pointer transition-colors duration-300 ease-out h-full"
+            className={`project-card group ${["tutur", "padtitur"].includes(project.id) ? "project-featured" : ""}`}
           >
+            <div className={`project-cover cover-${project.id}`}>
+              {project.id === "tutur" ? (
+                <div className="tutur-art" aria-hidden="true">
+                  <span>tutur</span>
+                  <div className="voice-bars">
+                    {[22, 40, 68, 36, 90, 56, 112, 74, 46, 82, 32, 60, 24].map((height, index) => <i key={index} style={{ height }} />)}
+                  </div>
+                  <p>Find your voice.<br />Shape your message.</p>
+                </div>
+              ) : project.id === "padtitur" ? (
+                <div className="padtitur-art" aria-hidden="true">
+                  <span>PadTitur</span>
+                  <div className="music-staff"><b>𝄞</b><i>♪</i><i>♫</i><i>♩</i></div>
+                  <p>From a handwritten note<br />to a musical idea.</p>
+                </div>
+              ) : <ProjectArtwork id={project.id} />}
+              <span className="cover-category">{categoryFor(project)}</span>
+              <span className="cover-caption">Concept illustration</span>
+            </div>
+            <div className="project-card-content">
             <div className="flex justify-between items-start">
               <motion.h3
                 layoutId={`project-title-${project.id}`}
@@ -266,171 +323,116 @@ export default function Projects() {
                 </span>
               )}
             </motion.div>
+            </div>
           </motion.div>
         ))}
       </div>
 
-      {/* Expanded Modal */}
+      {/* Project case study */}
       <AnimatePresence>
         {selectedProject && (
-          <motion.div layoutRoot className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8">
+          <motion.div layoutRoot className="case-overlay">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedProject(null)}
-              className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-pointer"
+              className="case-backdrop"
             />
-
             <motion.div
+              ref={modalRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="project-modal-title"
               layoutId={`project-container-${selectedProject.id}`}
               transition={{ layout: projectLayoutTransition }}
-              className="relative w-full max-w-5xl bg-[#0a0a0a] border border-gray-800 flex flex-col md:flex-row overflow-hidden max-h-[90vh] shadow-2xl z-10"
+              className="case-dialog"
             >
-              {/* Close Button */}
-              <button
-                onClick={() => setSelectedProject(null)}
-                className="absolute top-4 right-4 z-20 p-2 bg-black/50 hover:bg-black rounded-full text-gray-400 hover:text-white transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
+              <header className="case-header">
+                <div><span>Selected work</span><span className="case-header-divider" aria-hidden="true">/</span><span>{categoryFor(selectedProject)}</span></div>
+                <button onClick={() => setSelectedProject(null)} aria-label="Close project" className="case-close">Close <X size={17} /></button>
+              </header>
 
-              {/* Image Section / Slider */}
-              {selectedProject.images.length > 0 && (
-              <div className="w-full md:w-1/2 h-64 md:h-auto relative bg-[#050505] border-b md:border-b-0 md:border-r border-gray-800 flex items-center justify-center overflow-hidden">
-                <AnimatePresence mode="wait">
-                  <motion.img
-                    key={currentImageIndex}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3 }}
-                    src={selectedProject.images[currentImageIndex]}
-                    alt={`${selectedProject.title} - Image ${currentImageIndex + 1}`}
-                    className="w-full h-full object-contain"
-                  />
-                </AnimatePresence>
-
-                {/* Slider Controls */}
-                {selectedProject.images.length > 1 && (
-                  <>
-                    <button 
-                      onClick={handlePrevImage}
-                      disabled={currentImageIndex === 0}
-                      className="absolute left-4 p-2 bg-black/50 hover:bg-black disabled:opacity-30 disabled:hover:bg-black/50 text-white rounded-full transition-all"
-                    >
-                      <ChevronLeft className="w-6 h-6" />
-                    </button>
-                    <button 
-                      onClick={handleNextImage}
-                      disabled={currentImageIndex === selectedProject.images.length - 1}
-                      className="absolute right-4 p-2 bg-black/50 hover:bg-black disabled:opacity-30 disabled:hover:bg-black/50 text-white rounded-full transition-all"
-                    >
-                      <ChevronRight className="w-6 h-6" />
-                    </button>
-
-                    {/* Dots indicator */}
-                    <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
-                      {selectedProject.images.map((_, idx) => (
-                        <div 
-                          key={idx} 
-                          className={`w-2 h-2 rounded-full transition-all ${idx === currentImageIndex ? "bg-white scale-125" : "bg-white/30"}`}
+              <motion.div layoutScroll data-lenis-prevent className="case-body project-modal-scroll">
+                <aside className={`case-gallery case-gallery-${selectedProject.id}`} aria-label="Project gallery">
+                  <div className="case-image-stage">
+                    {selectedProject.images.length > 0 ? (
+                      <AnimatePresence mode="wait">
+                        <motion.img
+                          key={`${selectedProject.id}-${currentImageIndex}`}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.18 }}
+                          src={selectedProject.images[currentImageIndex]}
+                          alt={`${selectedProject.title} - Image ${currentImageIndex + 1}`}
+                          className="case-image"
                         />
+                      </AnimatePresence>
+                    ) : <ProjectArtwork id={selectedProject.id} />}
+                  </div>
+                  {selectedProject.images.length > 0 && (
+                    <div className="case-gallery-footer">
+                      <span aria-live="polite">Image {currentImageIndex + 1} <span className="case-count-divider">/</span> {selectedProject.images.length}</span>
+                      <div className="case-gallery-navigation">
+                        <button aria-label="Previous project image" onClick={handlePrevImage} disabled={currentImageIndex === 0}><ChevronLeft size={17} /></button>
+                        <button aria-label="Next project image" onClick={handleNextImage} disabled={currentImageIndex === selectedProject.images.length - 1}><ChevronRight size={17} /></button>
+                      </div>
+                    </div>
+                  )}
+                  {selectedProject.images.length > 1 && (
+                    <div className="case-thumbnails" aria-label="Choose project image">
+                      {selectedProject.images.map((src, index) => (
+                        <button key={src} aria-label={`View project image ${index + 1}`} aria-pressed={currentImageIndex === index} onClick={() => setCurrentImageIndex(index)}>
+                          <motion.img src={src} alt="" className="case-thumbnail-image" />
+                        </button>
                       ))}
                     </div>
-                  </>
-                )}
+                  )}
+                </aside>
 
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent md:bg-gradient-to-r opacity-30 pointer-events-none" />
-              </div>
-              )}
-
-              {/* Content Section */}
-              <motion.div layoutScroll data-lenis-prevent className={`project-modal-scroll w-full ${selectedProject.images.length > 0 ? "md:w-1/2" : "max-w-3xl mx-auto"} p-8 md:p-12 flex flex-col overflow-y-auto`}>
-                <motion.h3
-                  layoutId={`project-title-${selectedProject.id}`}
-                  transition={{ layout: projectLayoutTransition }}
-                  className="text-2xl md:text-4xl font-bold text-white mb-6"
-                >
-                  {selectedProject.title}
-                </motion.h3>
-
-                <div className="flex flex-wrap gap-6 mb-8 text-sm font-sans text-gray-400">
-                  <div className="flex items-center gap-2">
-                    <User className="w-4 h-4" />
-                    <span>{selectedProject.role}</span>
+                <motion.div layoutScroll data-lenis-prevent className="case-copy project-modal-scroll">
+                  <motion.h3
+                    id="project-modal-title"
+                    layoutId={`project-title-${selectedProject.id}`}
+                    transition={{ layout: projectLayoutTransition }}
+                  >{selectedProject.title}</motion.h3>
+                  <div className="case-meta">
+                    <div><User size={14} /><span>{selectedProject.role}</span></div>
+                    {selectedProject.duration && <div><Calendar size={14} /><span>{selectedProject.duration}</span></div>}
                   </div>
-                  {selectedProject.duration && <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4" />
-                    <span>{selectedProject.duration}</span>
-                  </div>}
-                </div>
+                  <motion.p
+                    layoutId={`project-desc-${selectedProject.id}`}
+                    transition={{ layout: projectLayoutTransition }}
+                    className="case-description"
+                  >{selectedProject.description}</motion.p>
 
-                <motion.p
-                  layoutId={`project-desc-${selectedProject.id}`}
-                  transition={{ layout: projectLayoutTransition }}
-                  className="font-sans text-gray-300 leading-relaxed mb-8"
-                >
-                  {selectedProject.description}
-                </motion.p>
-
-                {selectedProject.contributions && (
-                  <div className="mb-8">
-                    <h4 className="text-sm uppercase tracking-widest text-gray-500 font-sans mb-4">My Contribution</h4>
-                    <ul className="list-disc list-inside font-sans text-gray-300 space-y-2">
-                      {selectedProject.contributions.map((contribution) => <li key={contribution}>{contribution}</li>)}
-                    </ul>
-                  </div>
-                )}
-
-                <div className="mb-8">
-                  <h4 className="text-sm uppercase tracking-widest text-gray-500 font-sans mb-4">Key Features</h4>
-                  <ul className="list-disc list-inside font-sans text-gray-300 space-y-2">
-                    {selectedProject.keyFeatures.map((feature, idx) => (
-                      <li key={idx}>{feature}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                {selectedProject.outcome && (
-                  <div className="mb-8 border-l-2 border-gray-600 pl-4">
-                    <h4 className="text-sm uppercase tracking-widest text-gray-500 font-sans mb-4">Project Outcome</h4>
-                    <p className="font-sans text-gray-300 leading-relaxed">{selectedProject.outcome}</p>
-                  </div>
-                )}
-
-                <motion.div layoutId={`project-tags-${selectedProject.id}`} transition={{ layout: projectLayoutTransition }} className="flex flex-wrap gap-2 mb-10">
-                  {selectedProject.tags.map((tag, i) => (
-                    <span
-                      key={i}
-                      className="px-3 py-1 border border-gray-700 text-gray-300 text-xs uppercase tracking-wider font-sans"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                  {selectedProject.contributions && (
+                    <section className="case-detail-section">
+                      <h4>My contribution</h4>
+                      <ul>{selectedProject.contributions.map(contribution => <li key={contribution}>{contribution}</li>)}</ul>
+                    </section>
+                  )}
+                  <section className="case-detail-section">
+                    <h4>What it does</h4>
+                    <ul>{selectedProject.keyFeatures.map(feature => <li key={feature}>{feature}</li>)}</ul>
+                  </section>
+                  {selectedProject.outcome && (
+                    <section className="case-outcome">
+                      <h4>Project outcome</h4>
+                      <p>{selectedProject.outcome}</p>
+                    </section>
+                  )}
+                  <motion.div layoutId={`project-tags-${selectedProject.id}`} transition={{ layout: projectLayoutTransition }} className="case-tags">
+                    {selectedProject.tags.map(tag => <span key={tag}>{tag}</span>)}
+                  </motion.div>
+                  {(selectedProject.githubLink && selectedProject.githubLink !== "#" || selectedProject.liveLink && selectedProject.liveLink !== "#") && (
+                    <div className="case-links">
+                      {selectedProject.githubLink && selectedProject.githubLink !== "#" && <a href={selectedProject.githubLink} target="_blank" rel="noopener noreferrer"><FaGithub size={15} /> Source code <ArrowUpRight size={14} /></a>}
+                      {selectedProject.liveLink && selectedProject.liveLink !== "#" && <a href={selectedProject.liveLink} target="_blank" rel="noopener noreferrer"><ExternalLink size={15} /> Live demo <ArrowUpRight size={14} /></a>}
+                    </div>
+                  )}
                 </motion.div>
-
-                {/* Action Buttons */}
-                {(selectedProject.githubLink && selectedProject.githubLink !== "#" || selectedProject.liveLink && selectedProject.liveLink !== "#") && <div className="flex gap-4 mt-auto">
-                  {selectedProject.githubLink && selectedProject.githubLink !== "#" && <a
-                    href={selectedProject.githubLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 py-3 bg-white text-black font-semibold font-sans hover:bg-gray-200 transition-colors"
-                  >
-                    <FaGithub className="w-4 h-4" />
-                    Source Code
-                  </a>}
-                  {selectedProject.liveLink && selectedProject.liveLink !== "#" && <a
-                    href={selectedProject.liveLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 py-3 border border-gray-700 text-white font-semibold font-sans hover:bg-[#111111] transition-colors"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    Live Demo
-                  </a>}
-                </div>}
               </motion.div>
             </motion.div>
           </motion.div>

@@ -25,15 +25,15 @@ const links = [
   },
   {
     name: "Instagram",
-    value: "@sendis10",
-    url: "https://instagram.com/sendis10",
+    value: "@sendis__",
+    url: "https://instagram.com/sendis__",
     icon: FaInstagram,
   },
 ];
 
 export default function Contact() {
   return (
-    <section className="py-32 px-6 md:px-12 lg:px-24 bg-[#0a0a0a] flex justify-center relative overflow-hidden">
+    <section id="contact" className="contact-section py-32 px-6 md:px-12 lg:px-24 bg-[#0a0a0a] flex justify-center relative overflow-hidden">
       {/* Subtle background glow for the contact section */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] opacity-20 bg-blue-900/20 blur-[120px] pointer-events-none" />
 
@@ -45,10 +45,10 @@ export default function Contact() {
         className="w-full max-w-4xl flex flex-col items-center text-center z-10"
       >
         <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight uppercase">
-          Get in Touch
+          Let’s build something.
         </h2>
         <p className="text-lg md:text-xl text-gray-400 font-sans leading-relaxed mb-16 max-w-2xl">
-          I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions.
+          Have a problem worth exploring? Let’s talk about software, product ideas, or working together.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
