@@ -75,7 +75,13 @@ const projects: Project[] = [
     description: "Automated candidate evaluation system using a Retrieval-Augmented Generation (RAG) pipeline with local MiniLM embeddings and a Qdrant vector database for semantic retrieval. Integrated Gemini 2.5 Flash LLM using deterministic prompts and a fixed chunking strategy.",
     role: "Backend Engineer",
     duration: "2024",
-    images: ["https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&auto=format&fit=crop&q=80"],
+    images: [
+      "/projects/rag-cv-evaluator/Screenshot 2026-10-15 at 20.08.34.png",
+      "/projects/rag-cv-evaluator/Screenshot 2026-10-15 at 20.08.45.png",
+      "/projects/rag-cv-evaluator/Screenshot 2026-10-15 at 20.09.10.png",
+      "/projects/rag-cv-evaluator/Screenshot 2026-10-15 at 20.09.18.png",
+      "/projects/rag-cv-evaluator/Screenshot 2026-10-15 at 20.09.24.png"
+],
     tags: ["RAG", "Qdrant", "Gemini LLM", "MiniLM"],
     githubLink: "#",
     liveLink: "#",
@@ -171,7 +177,7 @@ const projects: Project[] = [
     description: "Developed a desktop application processing transaction data to identify purchasing patterns. Implemented the Apriori algorithm with optimized tree-structures and built a Java Swing GUI for visualizing association rules (support/confidence).",
     role: "Software Developer",
     duration: "2021",
-    images: ["https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80"],
+    images: ["/projects/analyst-sr/image analyst.png"],
     tags: ["Java Swing", "Apriori Algorithm", "Data Mining", "OOP"],
     githubLink: "#",
     liveLink: "#",
